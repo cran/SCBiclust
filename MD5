@@ -1,0 +1,12 @@
+f27d44d0bc32f1d17b8574aad87e96d8 *DESCRIPTION
+8d57d412f56863f8a8a31cdd7c1f219d *NAMESPACE
+d086a841ba75c1281a2bb974a9204c81 *R/SC-Biclust-SigClust-stop.R
+47c35875f921bdbb8bad20b5600d46e7 *R/SC-Biclust-SigClust.R
+444c78c4d2d4f5e228089893aeca269e *R/SC-HBiclust-SigClust.R
+9e5c48ab93b9262777eede2c39b3041e *R/SC-Var-Biclust.R
+ce5b85ff7258f63441fca47f6a6c35a4 *R/SCBiclust_beta_ks.R
+b43b2e8c2b9a81109618d7b35c2b3f67 *man/PermBiclust.beta.ks.Rd
+017294ccfbace96318fa749b2069aa6e *man/PermBiclust.sigclust.Rd
+bbfa01e73f01ac6c3bc673f5cdac3f1b *man/PermBiclust.sigclust_stop.Rd
+46e153071647403d2f0304a814d40e80 *man/PermHclust.sigclust.Rd
+28ec798966c7ec3f6bb32777c21b92ec *man/VarPermBiclust.chisqdiff.Rd
