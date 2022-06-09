@@ -49,7 +49,7 @@ PermBiclust.sigclust_stop <- function(x, nperms=1000, silent=TRUE, maxnum.biclus
     if (length(spcl)==1) {spcl <- spcl[[1]]}
 	ws.perm <- matrix(NA, nrow=nperms, ncol=ncol(x))
 	for(i in 1:nperms){
-		ws.perm[i,] <- sqrt(rbeta(ncol(x), .5, (ncol(x)-1)/2))
+		ws.perm[i,] <- sqrt(stats::rbeta(ncol(x), .5, (ncol(x)-1)/2))
 		ws.perm[i,] <- sort(ws.perm[i,])
 	}
 	sws <- sort(spcl$ws)
@@ -90,7 +90,7 @@ sc.pval<-ifelse(sc==FALSE,0,sigclust::sigclust(data,nsim=1000,labflag=1, label=s
 	        if (length(spcl)==1) {spcl <- spcl[[1]]}
 			ws.perm <- matrix(NA, nrow=nperms, ncol=ncol(x))
 			for(i in 1:nperms){
-				ws.perm[i,] <- sqrt(rbeta(ncol(x), .5, (ncol(x)-1)/2))
+				ws.perm[i,] <- sqrt(stats::rbeta(ncol(x), .5, (ncol(x)-1)/2))
 				ws.perm[i,] <- sort(ws.perm[i,])
 			}
 		sws <- sort(spcl$ws)

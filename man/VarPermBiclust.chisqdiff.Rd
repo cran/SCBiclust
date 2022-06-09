@@ -4,8 +4,12 @@
 \alias{VarPermBiclust.chisqdiff}
 \title{'SCBiclust' method for identifying variance-based biclusters}
 \usage{
-VarPermBiclust.chisqdiff(x, min.size = max(5, round(nrow(x)/20)),
-  nperms = 1000, silent = TRUE)
+VarPermBiclust.chisqdiff(
+  x,
+  min.size = max(5, round(nrow(x)/20)),
+  nperms = 1000,
+  silent = TRUE
+)
 }
 \arguments{
 \item{x}{a dataset with n rows and p columns, with observations in rows.}

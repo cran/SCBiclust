@@ -4,8 +4,13 @@
 \alias{PermBiclust.beta.ks}
 \title{'SCBiclust' method for identifying means-based biclusters with Kolmogorov-Smirnov test of feature weights}
 \usage{
-PermBiclust.beta.ks(x, nperms = 1000, silent = TRUE, maxnum.bicluster = 5,
-  ks.alpha = 0.05)
+PermBiclust.beta.ks(
+  x,
+  nperms = 1000,
+  silent = TRUE,
+  maxnum.bicluster = 5,
+  ks.alpha = 0.05
+)
 }
 \arguments{
 \item{x}{a dataset with n rows and p columns, with observations in rows.}

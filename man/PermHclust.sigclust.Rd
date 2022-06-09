@@ -4,10 +4,16 @@
 \alias{PermHclust.sigclust}
 \title{'SCBiclust' method for identifying hierarchically clustered biclusters}
 \usage{
-PermHclust.sigclust(x = NULL, method = c("average", "complete", "single",
-  "centroid"), wbound = sqrt(ncol(x)), alpha = 0.05, dat.perms = 1000,
-  dissimilarity = c("squared.distance", "absolute.value"), silent = TRUE,
-  sigstep = FALSE)
+PermHclust.sigclust(
+  x = NULL,
+  method = c("average", "complete", "single", "centroid"),
+  wbound = sqrt(ncol(x)),
+  alpha = 0.05,
+  dat.perms = 1000,
+  dissimilarity = c("squared.distance", "absolute.value"),
+  silent = TRUE,
+  sigstep = FALSE
+)
 }
 \arguments{
 \item{x}{a dataset with n rows and p columns, with observations in rows.}

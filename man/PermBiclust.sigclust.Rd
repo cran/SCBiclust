@@ -4,8 +4,14 @@
 \alias{PermBiclust.sigclust}
 \title{'SCBiclust' method for identifying means-based biclusters}
 \usage{
-PermBiclust.sigclust(x, nperms = 1000, silent = TRUE,
-  maxnum.bicluster = 5, alpha = 0.05, icovest = 1)
+PermBiclust.sigclust(
+  x,
+  nperms = 1000,
+  silent = TRUE,
+  maxnum.bicluster = 5,
+  alpha = 0.05,
+  icovest = 1
+)
 }
 \arguments{
 \item{x}{a dataset with n rows and p columns, with observations in rows.}

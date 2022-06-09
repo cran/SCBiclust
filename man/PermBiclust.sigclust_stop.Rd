@@ -4,8 +4,15 @@
 \alias{PermBiclust.sigclust_stop}
 \title{'SCBiclust' method for identifying means-based biclusters with optional cluster significance testing}
 \usage{
-PermBiclust.sigclust_stop(x, nperms = 1000, silent = TRUE,
-  maxnum.bicluster = 5, alpha = 0.05, icovest = 1, sc = TRUE)
+PermBiclust.sigclust_stop(
+  x,
+  nperms = 1000,
+  silent = TRUE,
+  maxnum.bicluster = 5,
+  alpha = 0.05,
+  icovest = 1,
+  sc = TRUE
+)
 }
 \arguments{
 \item{x}{a dataset with n rows and p columns, with observations in rows.}

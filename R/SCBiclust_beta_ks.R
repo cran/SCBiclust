@@ -45,7 +45,7 @@ PermBiclust.beta.ks <- function(x, nperms=1000, silent=TRUE, maxnum.bicluster=5,
     if (length(spcl)==1) {spcl <- spcl[[1]]}
 	ws.perm <- matrix(NA, nrow=nperms, ncol=ncol(x))
 	for(i in 1:nperms){
-		ws.perm[i,] <- sqrt(rbeta(ncol(x), .5, (ncol(x)-1)/2))
+		ws.perm[i,] <- sqrt(stats::rbeta(ncol(x), .5, (ncol(x)-1)/2))
 		ws.perm[i,] <- sort(ws.perm[i,])
 	}
 
@@ -57,10 +57,10 @@ PermBiclust.beta.ks <- function(x, nperms=1000, silent=TRUE, maxnum.bicluster=5,
 
 if (min(table(spcl$Cs))<2){message('Warning: number of significant observations <2')
 ks.pval=1} else 
-if (sum(spcl$ws>sws[sig.ndx])<2){message('Warning: number of significant features equals',ncol(as.matrix(data)))
+if (sum(spcl$ws>sws[sig.ndx])<2){message('Warning: number of significant features <2')
 ks.pval=1
 }else{
-  ks.pval <- ks.test(x=sws, y=ws.perm)$p.value}
+  ks.pval <- stats::ks.test(x=sws, y=ws.perm)$p.value}
 	
 	which.x <- list()
 	which.y <- list()
@@ -88,7 +88,7 @@ ks.pval=1
 	        if (length(spcl)==1) {spcl <- spcl[[1]]}
 			ws.perm <- matrix(NA, nrow=nperms, ncol=ncol(x))
 			for(i in 1:nperms){
-				ws.perm[i,] <- sqrt(rbeta(ncol(x), .5, (ncol(x)-1)/2))
+				ws.perm[i,] <- sqrt(stats::rbeta(ncol(x), .5, (ncol(x)-1)/2))
 				ws.perm[i,] <- sort(ws.perm[i,])
 			}
 
@@ -101,7 +101,7 @@ ks.pval=1} else
 if (sum(spcl$ws>sws[sig.ndx])<2){message('Warning: number of significant features <2')
 ks.pval=1
 }else{
-ks.pval <- ks.test(x=sws, y=ws.perm)$p.value}
+ks.pval <- stats::ks.test(x=sws, y=ws.perm)$p.value}
 
 			if(ks.pval >= ks.alpha | sum((spcl$ws>sws[sig.ndx]))<2| min(table( spcl$Cs))<2){    
 				message('Warning: bicluster', num.bicluster+1, 'does not exist \n')       

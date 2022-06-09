@@ -49,12 +49,12 @@ wbound=sqrt(ncol(x)), alpha=0.05, dat.perms=1000, dissimilarity=c('squared.dista
 	x <- scale(x)
 	sparsehc <- sparcl::HierarchicalSparseCluster(x, silent=TRUE,wbound=wbound, dissimilarity=dissimilarity, method=method)
 	
-	hcc <- cutree(sparsehc$hc, 2)
+	hcc <- stats::cutree(sparsehc$hc, 2)
 	hcc.perm <- hcc
 
 	ws.perm <- matrix(NA, nrow=dat.perms, ncol=ncol(x))
 	for(k in 1:dat.perms){
-		ws.perm[k,] <- sqrt(rbeta(ncol(x), .5, (ncol(x)-1)/2))
+		ws.perm[k,] <- sqrt(stats::rbeta(ncol(x), .5, (ncol(x)-1)/2))
 		ws.perm[k,] <- sort(ws.perm[k,])
 	}
 	sws <- sort(sparsehc$ws)

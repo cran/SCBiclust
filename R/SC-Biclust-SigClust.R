@@ -45,7 +45,7 @@ PermBiclust.sigclust <- function(x, nperms=1000, silent=TRUE, maxnum.bicluster=5
     if (length(spcl)==1) {spcl <- spcl[[1]]}
 	ws.perm <- matrix(NA, nrow=nperms, ncol=ncol(x))
 	for(i in 1:nperms){
-		ws.perm[i,] <- sqrt(rbeta(ncol(x), .5, (ncol(x)-1)/2))
+		ws.perm[i,] <- sqrt(stats::rbeta(ncol(x), .5, (ncol(x)-1)/2))
 		ws.perm[i,] <- sort(ws.perm[i,])
 	}
 	sws <- sort(spcl$ws)
@@ -86,7 +86,7 @@ sc.pval <- sigclust::sigclust(data,nsim=1000,labflag=1, label=spcl$Cs,icovest=ic
 	        if (length(spcl)==1) {spcl <- spcl[[1]]}
 			ws.perm <- matrix(NA, nrow=nperms, ncol=ncol(x))
 			for(i in 1:nperms){
-				ws.perm[i,] <- sqrt(rbeta(ncol(x), .5, (ncol(x)-1)/2))
+				ws.perm[i,] <- sqrt(stats::rbeta(ncol(x), .5, (ncol(x)-1)/2))
 				ws.perm[i,] <- sort(ws.perm[i,])
 			}
 		sws <- sort(spcl$ws)
@@ -151,17 +151,17 @@ UpdateCs<-function (x, K, ws, Cs)
     }
   }
   if (is.null(mus)) {
-    km <- kmeans(z, centers = K, nstart = 10)
+    km <- stats::kmeans(z, centers = K, nstart = 10)
   }
   else {
-    distmat <- as.matrix(dist(rbind(z, mus)))[1:nrowz, (nrowz + 
+    distmat <- as.matrix(stats::dist(rbind(z, mus)))[1:nrowz, (nrowz + 
                                                           1):(nrowz + K)]
     nearest <- apply(distmat, 1, which.min)
     if (length(unique(nearest)) == K) {
-      km <- kmeans(z, centers = mus)
+      km <- stats::kmeans(z, centers = mus)
     }
     else {
-      km <- kmeans(z, centers = K, nstart = 10)
+      km <- stats::kmeans(z, centers = K, nstart = 10)
     }
   }
   return(km$cluster)
@@ -187,14 +187,14 @@ SqrtKMeansSparseCluster <- function (x, K = NULL, wbounds = NULL, nstart = 20, s
   wbounds <- c(wbounds)
   out <- list()
   if (!is.null(K))
-    Cs <- kmeans(x, centers = K, nstart = nstart)$cluster
+    Cs <- stats::kmeans(x, centers = K, nstart = nstart)$cluster
   if (is.null(K))
-    Cs <- kmeans(x, centers = centers)$cluster
+    Cs <- stats::kmeans(x, centers = centers)$cluster
   for (i in 1:length(wbounds)) {
     if (length(wbounds) > 1 && !silent)
       message(i, fill = FALSE)
     ws <- rep(1/sqrt(ncol(x)), ncol(x))
-    ws.old <- rnorm(ncol(x))
+    ws.old <- stats::rnorm(ncol(x))
     store.bcss.ws <- NULL
     niter <- 0
     while ((sum(abs(ws - ws.old))/sum(abs(ws.old))) > 1e-04 &&

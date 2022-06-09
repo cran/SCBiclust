@@ -49,7 +49,7 @@ VarPermBiclust.chisqdiff <- function(x, min.size=max(5,round(nrow(x)/20)), nperm
 	## assign initial CI based on obs variance
 	x <- scale(x)
 	CI.old <- rep(1, nrow(x))
-	obsvar <- apply(x, 1, var)
+	obsvar <- apply(x, 1, stats::var)
 	obsvar.ord <- order(obsvar)
 	cut <- round(nrow(x)/2)
 	ind <- c(1:nrow(x))
@@ -97,7 +97,7 @@ VarPermBiclust.chisqdiff.ks <- function(x, min.size=max(5,round(nrow(x)/20)), np
 	## assign initial CI based on obs variance
 	x <- scale(x)
 	CI.old <- rep(1, nrow(x))
-	obsvar <- apply(x, 1, var)
+	obsvar <- apply(x, 1, stats::var)
 	obsvar.ord <- order(obsvar)
 	cut <- round(nrow(x)/2)
 	ind <- c(1:nrow(x))
@@ -127,7 +127,7 @@ VarPermBiclust.chisqdiff.ks <- function(x, min.size=max(5,round(nrow(x)/20)), np
 	}
 
 	sws <- sort(ref.ws)
-	ks.pval <- ks.test(x=sws, y=ws.perm)$p.value
+	ks.pval <- stats::ks.test(x=sws, y=ws.perm)$p.value
     which.x <- list()
 	which.y <- list()
     spcl.diff <- colMeans(ws.perm)-sws
@@ -148,11 +148,11 @@ VarPermBiclust.chisqdiff.ks <- function(x, min.size=max(5,round(nrow(x)/20)), np
 		
 		while(num.bicluster < maxnum.bicluster){
 				x[which.x[[num.bicluster]],which.y[[num.bicluster]]] <- t(t(x[which.x[[num.bicluster]],which.y[[num.bicluster]]]) 
-			                                                        * (apply(x[!which.x[[num.bicluster]],which.y[[num.bicluster]]], 2, sd) 
-																	/ apply(x[which.x[[num.bicluster]],which.y[[num.bicluster]]], 2, sd)))
+			                                                        * (apply(x[!which.x[[num.bicluster]],which.y[[num.bicluster]]], 2, stats::sd) 
+																	/ apply(x[which.x[[num.bicluster]],which.y[[num.bicluster]]], 2, stats::sd)))
 			x <- scale(x)
 			CI.old <- rep(1, nrow(x))
-			obsvar <- apply(x, 1, var)
+			obsvar <- apply(x, 1, stats::var)
 			obsvar.ord <- order(obsvar)
 			cut <- round(nrow(x)/2)
 			ind <- c(1:nrow(x))
@@ -179,7 +179,7 @@ VarPermBiclust.chisqdiff.ks <- function(x, min.size=max(5,round(nrow(x)/20)), np
 				ws.perm[i,] <- sort(ws.perm[i,])
 			}
 			sws <- sort(ref.ws)
-			ks.pval <- ks.test(x=sws, y=ws.perm)$p.value
+			ks.pval <- stats::ks.test(x=sws, y=ws.perm)$p.value
 		    spcl.diff <- colMeans(ws.perm)-sws
 			sig.ndx <- which.max(spcl.diff[1:(length(spcl.diff)-1)]-spcl.diff[2:length(spcl.diff)])
 
@@ -195,8 +195,8 @@ VarPermBiclust.chisqdiff.ks <- function(x, min.size=max(5,round(nrow(x)/20)), np
 			}
 		}
 		x[which.x[[num.bicluster]],which.y[[num.bicluster]]] <- t(t(x[which.x[[num.bicluster]],which.y[[num.bicluster]]]) 
-		                                                        * (apply(x[!which.x[[num.bicluster]],which.y[[num.bicluster]]], 2, sd) 
-																/ apply(x[which.x[[num.bicluster]],which.y[[num.bicluster]]], 2, sd)))
+		                                                        * (apply(x[!which.x[[num.bicluster]],which.y[[num.bicluster]]], 2, stats::sd) 
+																/ apply(x[which.x[[num.bicluster]],which.y[[num.bicluster]]], 2, stats::sd)))
 		
 		return(list(num.bicluster=num.bicluster, x.residual=x, which.x=which.x, which.y=which.y))
 	}
@@ -207,15 +207,15 @@ VarPermBiclust.chisqdiff.ks <- function(x, min.size=max(5,round(nrow(x)/20)), np
 
 var.diff <- function(x, CI, ws) {
   x <- scale(x)
-  var1 <- apply(x[CI==1,], 2, var)%*%ws
-  var2 <- apply(x[CI==2,], 2, var)%*%ws
+  var1 <- apply(x[CI==1,], 2, stats::var)%*%ws
+  var2 <- apply(x[CI==2,], 2, stats::var)%*%ws
   return(log(abs(var1-var2)+1))
 }
 
 rchisqdiff <- function(n, df1, df2){
   ## function to generate random variables following the same distribution as (X_df1^2 - X_df2^2)
-  chisq.1 <- rchisq(n, df1, ncp=0)/df1
-  chisq.2 <- rchisq(n, df2, ncp=0)/df2
+  chisq.1 <- stats::rchisq(n, df1, ncp=0)/df1
+  chisq.2 <- stats::rchisq(n, df2, ncp=0)/df2
   return(chisq.1-chisq.2)
 }
 
@@ -249,7 +249,7 @@ var.updateCI <- function(x, min.size, ws) {
 
 var.updateCI.2 <- function(x, min.size, ws) {
   x.Cs <- rep(1, nrow(x))
-  obsvar <- apply(x, 1, var)
+  obsvar <- apply(x, 1, stats::var)
   obsvar.ord <- order(obsvar)
   cut <- round(nrow(x)/2)
   ind <- c(1:nrow(x))
@@ -282,8 +282,8 @@ var.updateCI.2 <- function(x, min.size, ws) {
 
 
 var.updateWS <- function(x, CI){         ## update ws based on log of between cluster variance difference
-  ColVar1 <- apply(x[CI==1,], 2, var)
-  ColVar2 <- apply(x[CI==2,], 2, var)
+  ColVar1 <- apply(x[CI==1,], 2, stats::var)
+  ColVar2 <- apply(x[CI==2,], 2, stats::var)
   LogVarDiff <- log(abs(ColVar1-ColVar2)+1)
   ws.LogVarDiff <- LogVarDiff/sqrt(sum(LogVarDiff^2))
   return(ws.LogVarDiff)
