@@ -1,29 +1,31 @@
 #' 'SCBiclust' method for identifying hierarchically clustered biclusters
 #'
-#' @param x a dataset with n rows and p columns, with observations in rows. 
+#' @param x a dataset with n rows and p columns, with observations in rows.
 #' @param method method for agglomeration. See documentation in \code{\link{hclust}}. (default="average")
-#' @param wbound the tuning parameter for sparse hierarchical clustering. See documentation in \code{\link{HierarchicalSparseCluster}}. (default=\code{sqrt(ncol(x))})
-#' @param alpha significance level for \code{\link{sigclust}} test.
+#'
+#'
+#' @param wbound the tuning parameter for sparse hierarchical clustering. See documentation in \code{\link[sparcl]{HierarchicalSparseCluster}}. (default=\code{sqrt(ncol(x))})
+#' @param alpha significance level for \code{\link[sigclust]{sigclust}} test.
 #' @param dat.perms number of \eqn{Beta(\frac{1}{2}, (p-1)/2)} distributed variables generated for each feature (default=1000)
 #' @param dissimilarity How should dissimilarity be calculated? (default is "squared.distance").
 #' @param silent should progress be printed? (default=TRUE)
-#' @param sigstep Should \code{\link{sigclust}} be used to assess the strength of identified clusters? (default=FALSE)
+#' @param sigstep Should \code{\link[sigclust]{sigclust}} be used to assess the strength of identified clusters? (default=FALSE)
 #'
 #' @return
 #' The function returns a S3-object with the following attributes:
 #' \itemize{
-#' \item{\code{which.x}}: A list of length \code{num.bicluster} with each list entry containing a 
-#' logical vector denoting if the data observation is in the given bicluster. 
-#' \item{\code{which.y}}: A list of length \code{num.bicluster} with each list entry containing a 
-#' logical vector denoting if the data feature is in the given bicluster. 
+#' \item{\code{which.x}}: A list of length \code{num.bicluster} with each list entry containing a
+#' logical vector denoting if the data observation is in the given bicluster.
+#' \item{\code{which.y}}: A list of length \code{num.bicluster} with each list entry containing a
+#' logical vector denoting if the data feature is in the given bicluster.
 #' }
-#' 
+#'
 #' @details
 #' Observations in the bicluster are identified such that they maximize the feature-weighted version of the dissimilarity matrix as implemented in
-#' \code{\link{HierarchicalSparseCluster}}.
-#' Features in the bicluster are identified based on their contribution to the clustering of the observations. 
-#' #' This algoritm uses a numerical approximation to  \eqn{E(\sqrt{B})} where \eqn{B \sim Beta(\frac{1}{2}, (p-1)/2)} as the expected null 
-#' distribution for feature weights. 
+#' \code{\link[sparcl]{HierarchicalSparseCluster}}.
+#' Features in the bicluster are identified based on their contribution to the clustering of the observations.
+#' #' This algoritm uses a numerical approximation to  \eqn{E(\sqrt{B})} where \eqn{B \sim Beta(\frac{1}{2}, (p-1)/2)} as the expected null
+#' distribution for feature weights.
 #' @examples
 #' test <- matrix(nrow=500, ncol=50)
 #' theta <- rep(NA, 500)
@@ -40,15 +42,17 @@
 #' @name PermHclust.sigclust
 #' @author Erika S. Helgeson, Qian Liu, Guanhua Chen, Michael R. Kosorok , and Eric Bair
 
+#' @import stats
+#' @importFrom sigclust sigclust
+#' @importFrom sparcl HierarchicalSparseCluster
 
-
-PermHclust.sigclust <- function(x=NULL, method=c('average', 'complete', 'single', 'centroid'), 
+PermHclust.sigclust <- function(x=NULL, method=c('average', 'complete', 'single', 'centroid'),
 wbound=sqrt(ncol(x)), alpha=0.05, dat.perms=1000, dissimilarity=c('squared.distance', 'absolute.value'),silent=TRUE,sigstep=FALSE)
 {
 
 	x <- scale(x)
 	sparsehc <- sparcl::HierarchicalSparseCluster(x, silent=TRUE,wbound=wbound, dissimilarity=dissimilarity, method=method)
-	
+
 	hcc <- stats::cutree(sparsehc$hc, 2)
 	hcc.perm <- hcc
 
@@ -66,7 +70,7 @@ wbound=sqrt(ncol(x)), alpha=0.05, dat.perms=1000, dissimilarity=c('squared.dista
 if(min(table(hcc))<2|sum(sparsehc$ws>sws[sig.ndx])<2){
 which.y<-rep(NA,ncol(x))
 which.x<-rep(NA,nrow(x))}else if (sigstep==TRUE){
-sc.pval <- sigclust::sigclust(data,nsim=1000,labflag=1, label=hcc)@pval 
+sc.pval <- sigclust::sigclust(data,nsim=1000,labflag=1, label=hcc)@pval
 	if(sc.pval >= alpha){
 		message('Warning: no bicluster found \n')
 		which.y<-rep(NA,ncol(x))

@@ -20,9 +20,9 @@ PermHclust.sigclust(
 
 \item{method}{method for agglomeration. See documentation in \code{\link{hclust}}. (default="average")}
 
-\item{wbound}{the tuning parameter for sparse hierarchical clustering. See documentation in \code{\link{HierarchicalSparseCluster}}. (default=\code{sqrt(ncol(x))})}
+\item{wbound}{the tuning parameter for sparse hierarchical clustering. See documentation in \code{\link[sparcl]{HierarchicalSparseCluster}}. (default=\code{sqrt(ncol(x))})}
 
-\item{alpha}{significance level for \code{\link{sigclust}} test.}
+\item{alpha}{significance level for \code{\link[sigclust]{sigclust}} test.}
 
 \item{dat.perms}{number of \eqn{Beta(\frac{1}{2}, (p-1)/2)} distributed variables generated for each feature (default=1000)}
 
@@ -30,15 +30,15 @@ PermHclust.sigclust(
 
 \item{silent}{should progress be printed? (default=TRUE)}
 
-\item{sigstep}{Should \code{\link{sigclust}} be used to assess the strength of identified clusters? (default=FALSE)}
+\item{sigstep}{Should \code{\link[sigclust]{sigclust}} be used to assess the strength of identified clusters? (default=FALSE)}
 }
 \value{
 The function returns a S3-object with the following attributes:
 \itemize{
-\item{\code{which.x}}: A list of length \code{num.bicluster} with each list entry containing a 
-logical vector denoting if the data observation is in the given bicluster. 
-\item{\code{which.y}}: A list of length \code{num.bicluster} with each list entry containing a 
-logical vector denoting if the data feature is in the given bicluster. 
+\item{\code{which.x}}: A list of length \code{num.bicluster} with each list entry containing a
+logical vector denoting if the data observation is in the given bicluster.
+\item{\code{which.y}}: A list of length \code{num.bicluster} with each list entry containing a
+logical vector denoting if the data feature is in the given bicluster.
 }
 }
 \description{
@@ -46,9 +46,9 @@ logical vector denoting if the data feature is in the given bicluster.
 }
 \details{
 Observations in the bicluster are identified such that they maximize the feature-weighted version of the dissimilarity matrix as implemented in
-\code{\link{HierarchicalSparseCluster}}.
-Features in the bicluster are identified based on their contribution to the clustering of the observations. 
-#' This algoritm uses a numerical approximation to  \eqn{E(\sqrt{B})} where \eqn{B \sim Beta(\frac{1}{2}, (p-1)/2)} as the expected null 
+\code{\link[sparcl]{HierarchicalSparseCluster}}.
+Features in the bicluster are identified based on their contribution to the clustering of the observations.
+#' This algoritm uses a numerical approximation to  \eqn{E(\sqrt{B})} where \eqn{B \sim Beta(\frac{1}{2}, (p-1)/2)} as the expected null
 distribution for feature weights.
 }
 \examples{

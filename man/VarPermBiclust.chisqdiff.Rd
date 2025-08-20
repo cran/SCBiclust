@@ -24,10 +24,10 @@ where \eqn{n_1} and \eqn{n_2} are the number of observations in cluster 1 and cl
 \value{
 The function returns a S3-object with the following attributes:
 \itemize{
-\item{\code{which.x}}: A list of length \code{num.bicluster} with each list entry containing a 
-logical vector denoting if the data observation is in the given bicluster. 
-\item{\code{which.y}}: A list of length \code{num.bicluster} with each list entry containing a 
-logical vector denoting if the data feature is in the given bicluster. 
+\item{\code{which.x}}: A list of length \code{num.bicluster} with each list entry containing a
+logical vector denoting if the data observation is in the given bicluster.
+\item{\code{which.y}}: A list of length \code{num.bicluster} with each list entry containing a
+logical vector denoting if the data feature is in the given bicluster.
 }
 }
 \description{
@@ -35,12 +35,12 @@ logical vector denoting if the data feature is in the given bicluster.
 }
 \details{
 Observations in the bicluster are identified such that they maximize the feature-weighted sum of between cluster difference in feature variances.
-Features in the bicluster are identified based on their contribution to the clustering of the observations. 
-This algoritm uses a numerical approximation \eqn{log(abs(\chi^2_{n_1}-chi^2_{n_2})+1)} as the expected null 
-distribution for feature weights. 
+Features in the bicluster are identified based on their contribution to the clustering of the observations.
+This algoritm uses a numerical approximation \eqn{log(abs(\chi^2_{n_1}-chi^2_{n_2})+1)} as the expected null
+distribution for feature weights.
 
 \code{VarPermBiclust.chisqdiff} will identify at most one variance bicluster. To identify additional biclusters first the feature signal
-of the identified bicluster should be removed by scaling the variance of elements in the previously identified bicluster, Then 
+of the identified bicluster should be removed by scaling the variance of elements in the previously identified bicluster, Then
 \code{VarPermBiclust.chisqdiff} can be used on the residual data matrix. (see example)
 }
 \examples{

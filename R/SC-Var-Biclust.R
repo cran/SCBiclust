@@ -1,6 +1,6 @@
 #' 'SCBiclust' method for identifying variance-based biclusters
 #'
-#' @param x a dataset with n rows and p columns, with observations in rows. 
+#' @param x a dataset with n rows and p columns, with observations in rows.
 #' @param min.size Minimum size of observations included in a valid bicluster (default=\code{max(5,round(nrow(x)/20)))}
 #' @param nperms number of \eqn{\chi^2_{n_1}} and \eqn{\chi^2_{n_2}} variables generated for each feature
 #'  where \eqn{n_1} and \eqn{n_2} are the number of observations in cluster 1 and cluster 2, respectively. (default=100)
@@ -9,20 +9,20 @@
 #' @return
 #' The function returns a S3-object with the following attributes:
 #' \itemize{
-#' \item{\code{which.x}}: A list of length \code{num.bicluster} with each list entry containing a 
-#' logical vector denoting if the data observation is in the given bicluster. 
-#' \item{\code{which.y}}: A list of length \code{num.bicluster} with each list entry containing a 
-#' logical vector denoting if the data feature is in the given bicluster. 
+#' \item{\code{which.x}}: A list of length \code{num.bicluster} with each list entry containing a
+#' logical vector denoting if the data observation is in the given bicluster.
+#' \item{\code{which.y}}: A list of length \code{num.bicluster} with each list entry containing a
+#' logical vector denoting if the data feature is in the given bicluster.
 #' }
-#' 
+#'
 #' @details
 #' Observations in the bicluster are identified such that they maximize the feature-weighted sum of between cluster difference in feature variances.
-#' Features in the bicluster are identified based on their contribution to the clustering of the observations. 
-#' This algoritm uses a numerical approximation \eqn{log(abs(\chi^2_{n_1}-chi^2_{n_2})+1)} as the expected null 
-#' distribution for feature weights. 
+#' Features in the bicluster are identified based on their contribution to the clustering of the observations.
+#' This algoritm uses a numerical approximation \eqn{log(abs(\chi^2_{n_1}-chi^2_{n_2})+1)} as the expected null
+#' distribution for feature weights.
 #'
 #' \code{VarPermBiclust.chisqdiff} will identify at most one variance bicluster. To identify additional biclusters first the feature signal
-#' of the identified bicluster should be removed by scaling the variance of elements in the previously identified bicluster, Then 
+#' of the identified bicluster should be removed by scaling the variance of elements in the previously identified bicluster, Then
 #' \code{VarPermBiclust.chisqdiff} can be used on the residual data matrix. (see example)
 #' @examples
 #' test <- matrix(rnorm(100*50, mean=1, sd=2), nrow=100)
@@ -41,7 +41,7 @@
 #' @name VarPermBiclust.chisqdiff
 #' @author Erika S. Helgeson, Qian Liu, Guanhua Chen, Michael R. Kosorok , and Eric Bair
 
-
+#' @import stats
 
 
 
@@ -132,23 +132,23 @@ VarPermBiclust.chisqdiff.ks <- function(x, min.size=max(5,round(nrow(x)/20)), np
 	which.y <- list()
     spcl.diff <- colMeans(ws.perm)-sws
 	sig.ndx <- which.max(spcl.diff[1:(length(spcl.diff)-1)]-spcl.diff[2:length(spcl.diff)])
-	
+
 	if(ks.pval >= ks.alpha | sum(ref.ws>sws[sig.ndx])<2){
 		message('Warning: no variance bicluster found \n')
 		which.x[[1]] <- rep(1, nrow(x))
 		which.y[[1]] <- rep(0, ncol(x))
 		return(list(num.bicluster=0, x.residual=x, which.x=which.x, which.y=which.y))
 	}
-	
+
 	else{
 		num.bicluster <- 1
 	    which.x[[1]] <- CI.new==1
 	    if (sum(CI.new==2)<sum(which.x[[1]])) {which.x[[1]] <- CI.new==2}
 	    which.y[[1]] <- (ref.ws>sws[sig.ndx])
-		
+
 		while(num.bicluster < maxnum.bicluster){
-				x[which.x[[num.bicluster]],which.y[[num.bicluster]]] <- t(t(x[which.x[[num.bicluster]],which.y[[num.bicluster]]]) 
-			                                                        * (apply(x[!which.x[[num.bicluster]],which.y[[num.bicluster]]], 2, stats::sd) 
+				x[which.x[[num.bicluster]],which.y[[num.bicluster]]] <- t(t(x[which.x[[num.bicluster]],which.y[[num.bicluster]]])
+			                                                        * (apply(x[!which.x[[num.bicluster]],which.y[[num.bicluster]]], 2, stats::sd)
 																	/ apply(x[which.x[[num.bicluster]],which.y[[num.bicluster]]], 2, stats::sd)))
 			x <- scale(x)
 			CI.old <- rep(1, nrow(x))
@@ -171,7 +171,7 @@ VarPermBiclust.chisqdiff.ks <- function(x, min.size=max(5,round(nrow(x)/20)), np
 				CI.new <- var.updateCI.2(x, min.size, ws.old)
 				ws.new <- var.updateWS(x, CI.new)                                                   ## update ws
 			}
-			
+
 			ref.ws <- ws.new
 			ws.perm <- matrix(NA, nrow=nperms, ncol=ncol(x))
 			for(i in 1:nperms){
@@ -194,10 +194,10 @@ VarPermBiclust.chisqdiff.ks <- function(x, min.size=max(5,round(nrow(x)/20)), np
 			    which.y[[num.bicluster]] <- (ref.ws>sws[sig.ndx])
 			}
 		}
-		x[which.x[[num.bicluster]],which.y[[num.bicluster]]] <- t(t(x[which.x[[num.bicluster]],which.y[[num.bicluster]]]) 
-		                                                        * (apply(x[!which.x[[num.bicluster]],which.y[[num.bicluster]]], 2, stats::sd) 
+		x[which.x[[num.bicluster]],which.y[[num.bicluster]]] <- t(t(x[which.x[[num.bicluster]],which.y[[num.bicluster]]])
+		                                                        * (apply(x[!which.x[[num.bicluster]],which.y[[num.bicluster]]], 2, stats::sd)
 																/ apply(x[which.x[[num.bicluster]],which.y[[num.bicluster]]], 2, stats::sd)))
-		
+
 		return(list(num.bicluster=num.bicluster, x.residual=x, which.x=which.x, which.y=which.y))
 	}
 }

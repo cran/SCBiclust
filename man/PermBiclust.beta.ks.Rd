@@ -26,12 +26,12 @@ PermBiclust.beta.ks(
 \value{
 The function returns a S3-object with the following attributes:
 \itemize{
-\item{\code{num.bicluster}}: {The number of biclusters estimated by the procedure.}
-\item{\code{x.residual}}: {The data matrix \code{x} after removing the signals}
-\item{\code{which.x}}: A list of length \code{num.bicluster} with each list entry containing a 
-logical vector denoting if the data observation is in the given bicluster. 
-\item{\code{which.y}}: A list of length \code{num.bicluster} with each list entry containing a 
-logical vector denoting if the data feature is in the given bicluster. 
+\item{\code{num.bicluster}}: The number of biclusters estimated by the procedure.
+\item{\code{x.residual}}: The data matrix \code{x} after removing the signals
+\item{\code{which.x}}: A list of length \code{num.bicluster} with each list entry containing a
+logical vector denoting if the data observation is in the given bicluster.
+\item{\code{which.y}}: A list of length \code{num.bicluster} with each list entry containing a
+logical vector denoting if the data feature is in the given bicluster.
 }
 }
 \description{
@@ -39,11 +39,12 @@ logical vector denoting if the data feature is in the given bicluster.
 }
 \details{
 Observations in the bicluster are identified such that they maximize the feature-weighted square-root of the between cluster sum of squares.
-Features in the bicluster are identified based on their contribution to the clustering of the observations. 
-Feature weights are generated in a similar fashion as  \code{\link{KMeansSparseCluster}} 
+Features in the bicluster are identified based on their contribution to the clustering of the observations.
+Feature weights are generated in a similar fashion as  \code{\link[sparcl]{KMeansSparseCluster}}
+
 except with a modified objective function and no sparsity constraint.
 
-This algoritm uses a numerical approximation to  \eqn{E(\sqrt{B})} where \eqn{B \sim Beta(\frac{1}{2}, (p-1)/2)} as the expected null 
+This algoritm uses a numerical approximation to  \eqn{E(\sqrt{B})} where \eqn{B \sim Beta(\frac{1}{2}, (p-1)/2)} as the expected null
 distribution for feature weights. The Kolmogorov-Smirnov test is used to assess if feature weights deviate from the expected null distribution.
 }
 \examples{

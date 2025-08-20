@@ -23,21 +23,21 @@ PermBiclust.sigclust_stop(
 
 \item{maxnum.bicluster}{The maximum number of biclusters returned}
 
-\item{alpha}{significance level for \code{\link{sigclust}} test.}
+\item{alpha}{significance level for \code{\link[sigclust]{sigclust}} test.}
 
-\item{icovest}{Coviariance estimation type for \code{\link{sigclust}} test}
+\item{icovest}{Coviariance estimation type for \code{\link[sigclust]{sigclust}} test}
 
-\item{sc}{should the \code{\link{sigclust}} test be used? (default=TRUE)}
+\item{sc}{should the \code{\link[sigclust]{sigclust}} test be used? (default=TRUE)}
 }
 \value{
 The function returns a S3-object with the following attributes:
 \itemize{
-\item{\code{num.bicluster}}: {The number of biclusters estimated by the procedure.}
-\item{\code{x.residual}}: {The data matrix \code{x} after removing the signals}
-\item{\code{which.x}}: A list of length \code{num.bicluster} with each list entry containing a 
-logical vector denoting if the data observation is in the given bicluster. 
-\item{\code{which.y}}: A list of length \code{num.bicluster} with each list entry containing a 
-logical vector denoting if the data feature is in the given bicluster. 
+\item{\code{num.bicluster}}: The number of biclusters estimated by the procedure.
+\item{\code{x.residual}}: The data matrix \code{x} after removing the signals
+\item{\code{which.x}}: A list of length \code{num.bicluster} with each list entry containing a
+logical vector denoting if the data observation is in the given bicluster.
+\item{\code{which.y}}: A list of length \code{num.bicluster} with each list entry containing a
+logical vector denoting if the data feature is in the given bicluster.
 }
 }
 \description{
@@ -45,11 +45,11 @@ logical vector denoting if the data feature is in the given bicluster.
 }
 \details{
 Observations in the bicluster are identified such that they maximize the feature-weighted between cluster sum of squares.
-Features in the bicluster are identified based on their contribution to the clustering of the observations. 
-Feature weights are generated in a similar fashion as  \code{\link{KMeansSparseCluster}} 
+Features in the bicluster are identified based on their contribution to the clustering of the observations.
+Feature weights are generated in a similar fashion as  \code{\link[sparcl]{KMeansSparseCluster}}
 except with a modified objective function and no sparsity constraint.
-This algoritm uses a numerical approximation to  \eqn{E(\sqrt{B})} where \eqn{B \sim Beta(\frac{1}{2}, (p-1)/2)} as the expected null 
-distribution for feature weights. Use of the \code{\link{sigclust}} algorithm  to test the strength of the identified clusters is optional in this
+This algoritm uses a numerical approximation to  \eqn{E(\sqrt{B})} where \eqn{B \sim Beta(\frac{1}{2}, (p-1)/2)} as the expected null
+distribution for feature weights. Use of the \code{\link[sigclust]{sigclust}} algorithm  to test the strength of the identified clusters is optional in this
 implementation of the algorithm.
 }
 \examples{

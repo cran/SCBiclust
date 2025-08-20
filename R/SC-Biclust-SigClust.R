@@ -1,32 +1,32 @@
 #' 'SCBiclust' method for identifying means-based biclusters
 #'
-#' @param x a dataset with n rows and p columns, with observations in rows. 
+#' @param x a dataset with n rows and p columns, with observations in rows.
 #' @param nperms number of \eqn{Beta(\frac{1}{2}, (p-1)/2)} distributed variables generated for each feature (default=1000)
 #' @param silent should progress be printed? (default=TRUE)
-#' @param maxnum.bicluster The maximum number of biclusters returned  
-#' @param alpha significance level for \code{\link{sigclust}} test.
-#' @param icovest Coviariance estimation type for \code{\link{sigclust}} test
+#' @param maxnum.bicluster The maximum number of biclusters returned
+#' @param alpha significance level for \code{\link[sigclust]{sigclust}} test.
+#' @param icovest Coviariance estimation type for \code{\link[sigclust]{sigclust}} test
 #'
 
 #' @return
 #' The function returns a S3-object with the following attributes:
 #' \itemize{
-#' \item{\code{num.bicluster}}: {The number of biclusters estimated by the procedure.}
-#' \item{\code{x.residual}}: {The data matrix \code{x} after removing the signals}
-#' \item{\code{which.x}}: A list of length \code{num.bicluster} with each list entry containing a 
-#' logical vector denoting if the data observation is in the given bicluster. 
-#' \item{\code{which.y}}: A list of length \code{num.bicluster} with each list entry containing a 
-#' logical vector denoting if the data feature is in the given bicluster. 
+#' \item{\code{num.bicluster}}: The number of biclusters estimated by the procedure.
+#' \item{\code{x.residual}}: The data matrix \code{x} after removing the signals
+#' \item{\code{which.x}}: A list of length \code{num.bicluster} with each list entry containing a
+#' logical vector denoting if the data observation is in the given bicluster.
+#' \item{\code{which.y}}: A list of length \code{num.bicluster} with each list entry containing a
+#' logical vector denoting if the data feature is in the given bicluster.
 #' }
-#' 
+#'
 #' @details
 #' Observations in the bicluster are identified such that they maximize the feature-weighted between cluster sum of squares.
-#' Features in the bicluster are identified based on their contribution to the clustering of the observations. 
-#' Feature weights are generated in a similar fashion as  \code{\link{KMeansSparseCluster}} 
+#' Features in the bicluster are identified based on their contribution to the clustering of the observations.
+#' Feature weights are generated in a similar fashion as  \code{\link[sparcl]{KMeansSparseCluster}}
 #' except with a modified objective function and no sparsity constraint.
-#' This algoritm uses a numerical approximation to  \eqn{E(\sqrt{B})} where \eqn{B \sim Beta(\frac{1}{2}, (p-1)/2)} as the expected null 
-#' distribution for feature weights. The \code{\link{sigclust}} algorithm is used to test the strength of the identified clusters.
-#'  
+#' This algoritm uses a numerical approximation to  \eqn{E(\sqrt{B})} where \eqn{B \sim Beta(\frac{1}{2}, (p-1)/2)} as the expected null
+#' distribution for feature weights. The \code{\link[sigclust]{sigclust}} algorithm is used to test the strength of the identified clusters.
+#'
 #' @examples
 #'  test <- matrix(rnorm(60*180), nrow=60, ncol=180)
 #' test[1:15,1:15] <- test[1:15,1:15]+rnorm(15*15, 2)
@@ -34,9 +34,10 @@
 #' PermBiclust.sigclust(test, silent=TRUE)
 #' @export
 #' @name PermBiclust.sigclust
-#' @author Erika S. Helgeson, Qian Liu, Guanhua Chen, Michael R. Kosorok , and Eric Bair 
+#' @author Erika S. Helgeson, Qian Liu, Guanhua Chen, Michael R. Kosorok , and Eric Bair
 
-
+#' @import stats
+#' @importFrom sigclust sigclust
 
 PermBiclust.sigclust <- function(x, nperms=1000, silent=TRUE, maxnum.bicluster=5, alpha=0.05,icovest=1)
 {
@@ -59,10 +60,10 @@ sc.pval=1
 }else{
 sc.pval <- sigclust::sigclust(data,nsim=1000,labflag=1, label=spcl$Cs,icovest=icovest)@pval}
 
-	
+
     which.x <- list()
 	which.y <- list()
-   
+
 	if(sc.pval >= alpha | sum(spcl$ws>sws[sig.ndx])<2){
 		message('Warning: no bicluster found \n')
 		which.x[[1]] <- rep(NA, nrow(x))
@@ -103,14 +104,14 @@ sc.pval <- sigclust::sigclust(data,nsim=1000,labflag=1, label=spcl$Cs,icovest=ic
 				message('Warning: bicluster', num.bicluster+1, 'does not exist \n')
 				return(list(num.bicluster=num.bicluster, x.residual=x, which.x=which.x, which.y=which.y))
 			} else{
-			
+
 				num.bicluster <- num.bicluster+1
 				which.x[[num.bicluster]] <- spcl$Cs==1
 			    if (sum(spcl$Cs==2)<sum(which.x[[num.bicluster]])) {which.x[[num.bicluster]] <- spcl$Cs==2}
 			    which.y[[num.bicluster]] <- (spcl$ws>sws[sig.ndx])
 			}
 		}
-		
+
 		mean.signal <- colMeans(x[which.x[[num.bicluster]], which.y[[num.bicluster]]])
 		mu <- colMeans(x[!which.x[[num.bicluster]], which.y[[num.bicluster]]])
 		delta <- mean.signal - mu
@@ -136,7 +137,7 @@ SqrtUpdateWs <- function (x, Cs, l1bound)
   return(sqrt(bcss.perfeature)/sqrt(sum(bcss.perfeature)))
 }
 
-UpdateCs<-function (x, K, ws, Cs) 
+UpdateCs<-function (x, K, ws, Cs)
 {
   x <- x[, ws != 0]
   z <- sweep(x, 2, sqrt(ws[ws != 0]), "*")
@@ -144,9 +145,9 @@ UpdateCs<-function (x, K, ws, Cs)
   mus <- NULL
   if (!is.null(Cs)) {
     for (k in unique(Cs)) {
-      if (sum(Cs == k) > 1) 
+      if (sum(Cs == k) > 1)
         mus <- rbind(mus, apply(z[Cs == k, ], 2, mean))
-      if (sum(Cs == k) == 1) 
+      if (sum(Cs == k) == 1)
         mus <- rbind(mus, z[Cs == k, ])
     }
   }
@@ -154,7 +155,7 @@ UpdateCs<-function (x, K, ws, Cs)
     km <- stats::kmeans(z, centers = K, nstart = 10)
   }
   else {
-    distmat <- as.matrix(stats::dist(rbind(z, mus)))[1:nrowz, (nrowz + 
+    distmat <- as.matrix(stats::dist(rbind(z, mus)))[1:nrowz, (nrowz +
                                                           1):(nrowz + K)]
     nearest <- apply(distmat, 1, which.min)
     if (length(unique(nearest)) == K) {
